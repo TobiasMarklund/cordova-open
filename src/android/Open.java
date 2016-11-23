@@ -2,6 +2,7 @@ package com.disusered;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.LOG;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +17,8 @@ import android.os.Build;
  * This class starts an activity for an intent to view files
  */
 public class Open extends CordovaPlugin {
+
+  private static final String TAG = "Open";
 
   public static final String OPEN_ACTION = "open";
 
@@ -44,7 +47,7 @@ public class Open extends CordovaPlugin {
       mimeType = mime.getMimeTypeFromExtension(extension);
     }
 
-    System.out.println("Mime type: " + mimeType);
+    LOG.d(TAG, "Mime type: " + mimeType);
 
     return mimeType;
   }
@@ -61,7 +64,7 @@ public class Open extends CordovaPlugin {
         Uri uri = Uri.parse(path);
         String mime = getMimeType(path);
         Intent fileIntent = new Intent(Intent.ACTION_VIEW);
-
+		
         if( Build.VERSION.SDK_INT > 15 ){
           fileIntent.setDataAndTypeAndNormalize(uri, mime); // API Level 16 -> Android 4.1
         } else {
@@ -72,7 +75,7 @@ public class Open extends CordovaPlugin {
 
         callbackContext.success();
       } catch (ActivityNotFoundException e) {
-        e.printStackTrace();
+        LOG.e(TAG, "Could not open activity", e);
         callbackContext.error(1);
       }
     } else {
