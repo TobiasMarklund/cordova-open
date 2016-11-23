@@ -44,7 +44,7 @@ public class Open extends CordovaPlugin {
   private static String getMimeType(String path) {
     String mimeType = null;
 
-    String extension = MimeTypeMap.getFileExtensionFromUrl(path);
+    String extension = MimeTypeMap.getFileExtensionFromUrl(path.toLowerCase());
     if (extension != null) {
       MimeTypeMap mime = MimeTypeMap.getSingleton();
       mimeType = mime.getMimeTypeFromExtension(extension);
