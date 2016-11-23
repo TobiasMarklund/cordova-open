@@ -12,6 +12,9 @@ import android.content.Intent;
 import android.webkit.MimeTypeMap;
 import android.content.ActivityNotFoundException;
 import android.os.Build;
+import android.support.v4.content.FileProvider;
+
+import java.io.File;
 
 /**
  * This class starts an activity for an intent to view files
@@ -64,6 +67,14 @@ public class Open extends CordovaPlugin {
         Uri uri = Uri.parse(path);
         String mime = getMimeType(path);
         Intent fileIntent = new Intent(Intent.ACTION_VIEW);
+
+        if (uri.getScheme().equals("file")) {
+          String authority = this.cordova.getActivity().getApplicationContext().getPackageName() + ".fileprovider";
+          File f = new File(uri.getPath());
+          uri = FileProvider.getUriForFile(this.cordova.getActivity(), authority, f);
+          fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+          LOG.d(TAG, "Resolved content uri: " + uri.toString());
+        }
 		
         if( Build.VERSION.SDK_INT > 15 ){
           fileIntent.setDataAndTypeAndNormalize(uri, mime); // API Level 16 -> Android 4.1

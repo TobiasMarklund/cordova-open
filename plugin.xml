@@ -17,6 +17,12 @@
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml"/>
     <source-file src="src/android/Open.java" target-dir="src/com/disusered"/>
+    <config-file target="AndroidManifest.xml" parent="./application">
+      <provider android:name="android.support.v4.content.FileProvider" android:authorities="$PACKAGE_NAME.fileprovider" android:grantUriPermissions="true" android:exported="false">
+        <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/open_fileprovider" />
+      </provider>
+    </config-file>
+    <resource-file src="res/xml/open_fileprovider.xml" target="res/xml/open_fileprovider.xml" />
   </platform>
   <platform name="ios">
     <config-file parent="/*" target="config.xml">
